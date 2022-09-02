@@ -1,14 +1,15 @@
-const { ethers } = require("hardhat");
 const hre = require("hardhat");
 
 async function main() {
     // get contract to deploy
-    const Token = await ethers.getContractFactory("Token")
+    const Token = await hre.ethers.getContractFactory("Token");
 
     // deploy contract
-    const token = await Token.deploy()
-    await token.deployed()
-    console.log(`Token Deployed to: ${token.address}`)
+    const token = await Token.deploy();
+    await token.deployed();
+    console.log(`Token Deployed to: ${token.address}`);
+    // console.log(`Token name: ${token.name}`)
+
 }
 
 
