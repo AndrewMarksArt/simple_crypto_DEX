@@ -7,34 +7,35 @@ const tokens = (num) => {
 
 describe("Token", ()=> {
     let token
+
     beforeEach(async () => {
          // fetch token from blockchain
          const Token = await ethers.getContractFactory('Token')
          token = await Token.deploy('Viking Gold', 'VIKINGg', '1000000000')
     })
-    // check the token name is correct
-    it("has correct name", async () => {
-        // check that the name is correct
-        expect(await token.name()).to.equal("Viking Gold")
+
+    describe('Deployment', () => {
+        const name = 'Viking Gold'
+        const symbol = 'VIKINGg'
+        const decimals = '18'
+        const totalSupply = '1000000000'
+
+        it("has correct name", async () => {
+            expect(await token.name()).to.equal(name)
+        })
+
+        it("has correct symbol", async () => {
+            expect(await token.symbol()).to.equal(symbol)
+        })
+
+        it("has correct decimals", async () => {
+            expect(await token.decimals()).to.equal(decimals)
+        })
+
+        it("has correct total supply", async () => {
+            expect(await token.totalSupply()).to.equal(tokens(totalSupply))
+        })
     })
 
-    // check the token symbol is correct
-    it("has correct symbol", async () => {
-        // check that the name is correct
-        expect(await token.symbol()).to.equal("VIKINGg")
-
-    })
-
-    // check it has the correct number of decimals
-    it("has correct decimals", async () => {
-        // check that the name is correct
-        expect(await token.decimals()).to.equal("18")
-
-    })
-
-    // check the total supply is correct
-    it("has correct total supply", async () => {
-        expect(await token.totalSupply()).to.equal(tokens('1000000000'))
-
-    })
+   
 })
