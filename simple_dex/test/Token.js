@@ -10,7 +10,7 @@ describe("Token", ()=> {
     beforeEach(async () => {
          // fetch token from blockchain
          const Token = await ethers.getContractFactory('Token')
-         token = await Token.deploy()
+         token = await Token.deploy('Viking Gold', 'VIKINGg', '1000000000')
     })
     // check the token name is correct
     it("has correct name", async () => {
