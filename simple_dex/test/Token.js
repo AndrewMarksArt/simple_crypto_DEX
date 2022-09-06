@@ -1,6 +1,10 @@
 const { ethers } = require('hardhat');
 const { expect } = require('chai');
 
+const tokens = (num) => {
+    return ethers.utils.parseUnits(num.toString(), 'ether')
+}
+
 describe("Token", ()=> {
     let token
     beforeEach(async () => {
@@ -18,6 +22,19 @@ describe("Token", ()=> {
     it("has correct symbol", async () => {
         // check that the name is correct
         expect(await token.symbol()).to.equal("VIKINGg")
+
+    })
+
+    // check it has the correct number of decimals
+    it("has correct decimals", async () => {
+        // check that the name is correct
+        expect(await token.decimals()).to.equal("18")
+
+    })
+
+    // check the total supply is correct
+    it("has correct total supply", async () => {
+        expect(await token.totalSupply()).to.equal(tokens('1000000000'))
 
     })
 })
