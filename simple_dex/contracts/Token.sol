@@ -30,6 +30,10 @@ contract Token {
         public
         returns (bool success) 
     {
+        // require that sender has enough tokens to spend
+        require(balanceOf[msg.sender] >= _value);
+        require(_to != address(0));
+
         // deduct tokens from sender
         balanceOf[msg.sender] = balanceOf[msg.sender] - _value;
         // credit tokens to reciever
