@@ -6,7 +6,7 @@ const tokens = (num) => {
 }
 
 describe("Token", ()=> {
-    let token, accounts, deployer
+    let token, accounts, deployer, reciever
 
     beforeEach(async () => {
          // fetch token from blockchain
@@ -15,6 +15,7 @@ describe("Token", ()=> {
          // fetch accounts
          accounts = await ethers.getSigners()
          deployer = accounts[0]
+         reciever = accounts[1]
     })
 
     describe('Deployment', () => {
@@ -41,6 +42,24 @@ describe("Token", ()=> {
 
         it('assigns total supply to deployer', async () => {
             expect(await token.balanceOf(deployer.address)).to.equal(tokens(totalSupply))
+        })
+    })
+
+    describe('Sending Tokens', () => {
+        let amount, transaction, result
+
+        beforeEach(async () => {
+            // amount to send
+            amount = tokens(100)
+            // trasfer tokens
+            transaction = await token.connect(deployer).transfer(reciever.address, amount)
+            result = transaction.wait()
+        })
+
+        it("Trasfers token balances", async () => {
+            // ensure that tokesn were transfered
+            expect(await token.balanceOf(deployer.address)).to.equal(tokens(1000000000-100))
+            expect(await token.balanceOf(reciever.address)).to.equal(amount)
         })
     })
 
