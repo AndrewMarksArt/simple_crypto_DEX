@@ -6,12 +6,15 @@ const tokens = (num) => {
 }
 
 describe("Token", ()=> {
-    let token
+    let token, accounts, deployer
 
     beforeEach(async () => {
          // fetch token from blockchain
          const Token = await ethers.getContractFactory('Token')
          token = await Token.deploy('Viking Gold', 'VIKINGg', '1000000000')
+         // fetch accounts
+         accounts = await ethers.getSigners()
+         deployer = accounts[0]
     })
 
     describe('Deployment', () => {
@@ -34,6 +37,10 @@ describe("Token", ()=> {
 
         it("has correct total supply", async () => {
             expect(await token.totalSupply()).to.equal(tokens(totalSupply))
+        })
+
+        it('assigns total supply to deployer', async () => {
+            expect(await token.balanceOf(deployer.address)).to.equal(tokens(totalSupply))
         })
     })
 
