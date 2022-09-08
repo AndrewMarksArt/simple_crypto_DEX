@@ -72,9 +72,17 @@ contract Token {
         public
         returns (bool success)
     {
-        // check approval
+        // check balcne to see if they have enough tokens
+        require(_value <= balanceOf[_from]);
+        // check aproval
+        require(_value <= allowence[_from][msg.sender]);
+
+        // reset allowence
+        allowence[_from][msg.sender] = allowence[_from][msg.sender] - _value;
 
         // spend tokens
+        _transfer(_from, _to, _value);
 
+        return true;
     }
 }
