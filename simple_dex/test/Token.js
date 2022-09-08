@@ -144,9 +144,28 @@ describe("Token", ()=> {
             it('transfers token balances', async () => {
                 expect(await token.balanceOf(deployer.address)).to.be.equal(tokens(1000000000-100))
             })
+
+            it('resets the allowence', async () => {
+                expect(await token.allowence(deployer.address, exchange.address)).to.be.equal(0)
+            })
+
+            it("emits a transfer Event", async () => {
+                // ensure the Transfer event happens
+                const eventLog = result.events[0]
+                expect(eventLog.event).to.equal('Transfer')
+    
+                // ensure from =, to, and value from the event are correct
+                const args = eventLog.args
+                expect(args.from).to.equal(deployer.address)
+                expect(args.to).to.equal(reciever.address)
+                expect(args.value).to.equal(amount)
+            })
         })
 
-        describe('Failure', () => {
+        describe('Failure', async () => {
+            // attempt to transfer to many tokens
+            const invalidAmount = tokens(1000000000000)
+            await expect(token.connect(exchange).transferFrom(deployer.address, reciever.address, invalidAmount)).to.be.reverted
 
         })
     })
