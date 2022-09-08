@@ -6,7 +6,7 @@ const tokens = (num) => {
 }
 
 describe("Token", ()=> {
-    let token, accounts, deployer, reciever
+    let token, accounts, deployer, reciever, exchange
 
     beforeEach(async () => {
          // fetch token from blockchain
@@ -16,6 +16,8 @@ describe("Token", ()=> {
          accounts = await ethers.getSigners()
          deployer = accounts[0]
          reciever = accounts[1]
+         // dont have an exchange account use [2] as placeholder
+         exchange = accounts[2]
     })
 
     describe('Deployment', () => {
@@ -91,6 +93,25 @@ describe("Token", ()=> {
         })
 
         
+    })
+
+    describe('Aproving Tokens', () => {
+        let amount, transaction, result
+
+        beforeEach(async () => {
+            amount = tokens(100)
+            transaction = await token.connect(deployer).approve(exchange.address, amount)
+            result = await transaction.wait()
+        })
+
+        describe('Success', () => {
+            it("allocates an allowence for delegated token spending", async () => {
+                expect(await token.allowence(deployer.address, exchange.address)).to.equal(amount)
+            })
+        })
+        describe("Failure", () => {
+
+        })
     })
 
    
